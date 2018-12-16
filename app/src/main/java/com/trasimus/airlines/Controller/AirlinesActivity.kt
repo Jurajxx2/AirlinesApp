@@ -1,6 +1,7 @@
 package com.trasimus.airlines.Controller
 
 import android.content.SharedPreferences
+import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -10,6 +11,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.trasimus.airlines.Controller.Database.AppDatabase
@@ -37,6 +40,8 @@ class AirlinesActivity : AppCompatActivity() {
     private lateinit var airlineJson: String
     private var isFavourite: Boolean = false
 
+    private lateinit var loadingBar: ProgressBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_airlines)
@@ -44,6 +49,7 @@ class AirlinesActivity : AppCompatActivity() {
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         firstBoot = sharedPref.getBoolean("firstBoot", false)
         appDatabase = AppDatabase.getInstance(this)
+        loadingBar = findViewById(R.id.loading)
 
         airlinesList = arrayListOf()
 
@@ -63,6 +69,15 @@ class AirlinesActivity : AppCompatActivity() {
         airlinesData = airlineEnums.toList()
     }
 
+    private fun sync(){
+        loadingBar.visibility = View.VISIBLE
+        doAsync {
+            appDatabase.airlineModel().deleteAllAirlines()
+            downloadData()
+            convertData()
+        }
+    }
+
     private fun showData(){
         val recyclerView = findViewById<RecyclerView>(R.id.airlinesList)
         val mAdapter = AirlinesAdapter(airlines, this@AirlinesActivity)
@@ -70,6 +85,7 @@ class AirlinesActivity : AppCompatActivity() {
         recyclerView!!.layoutManager = mLayoutManager
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = mAdapter
+        loadingBar.visibility = View.GONE
     }
 
     private fun convertData(){
@@ -123,6 +139,10 @@ class AirlinesActivity : AppCompatActivity() {
                         }
                     }
                 }
+                true
+            }
+            R.id.sync -> {
+                sync()
                 true
             }
             else -> super.onOptionsItemSelected(item)

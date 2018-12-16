@@ -12,6 +12,9 @@ interface AirlineDao {
     @Query("SELECT * FROM Airlines where id = :id")
     fun getAirlineById(id: Int): Airline
 
+    @Query("DELETE FROM Airlines")
+    fun deleteAllAirlines()
+
     @Query("SELECT * FROM Airlines where isFavourite = 1")
     fun getFavouriteAirlines(): List<Airline>
 

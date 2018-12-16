@@ -6,10 +6,8 @@ import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = "Airlines")
 class Airline(
-    @ColumnInfo(name = "logo") var logoUrl: String, @ColumnInfo(name = "name") var name: String, @ColumnInfo(
-        name = "isFavourite"
-    ) var isFavourite: Boolean
-) {
+    @ColumnInfo(name = "logo") var logoUrl: String, @ColumnInfo(name = "name") var name: String, @ColumnInfo(name = "phone") var phone: String, @ColumnInfo(name = "url") var url: String, @ColumnInfo(
+        name = "isFavourite") var isFavourite: Boolean) {
 
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

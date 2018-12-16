@@ -58,6 +58,12 @@ class AirlinesAdapter(private var airlines:List<Airline>, private val context: C
             favouriteToggleButton.onClick {
                 (context as AirlinesActivity).userItemClick(adapterPosition)
             }
+            logo.onClick {
+                (context as AirlinesActivity).airlineClick(adapterPosition)
+            }
+            name.onClick {
+                (context as AirlinesActivity).airlineClick(adapterPosition)
+            }
         }
      }
 }

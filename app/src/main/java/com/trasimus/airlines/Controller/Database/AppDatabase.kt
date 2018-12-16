@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.trasimus.airlines.Objects.Airline
 
-@Database(entities = [(Airline::class)], version = 1)
+@Database(entities = [(Airline::class)], version = 2)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun airlineModel(): AirlineDao

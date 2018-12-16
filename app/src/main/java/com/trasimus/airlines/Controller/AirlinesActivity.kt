@@ -1,5 +1,6 @@
 package com.trasimus.airlines.Controller
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
@@ -91,7 +92,17 @@ class AirlinesActivity : AppCompatActivity() {
     private fun convertData(){
         var airlineObject: Airline
         airlinesData.forEach {
-            airlineObject = Airline(it.logoURL, it.name, false)
+            val phone: String = if (it.phone.isNullOrEmpty()){
+                "not specified"
+            } else {
+                it.phone
+            }
+            val url: String = if (it.site.isNullOrEmpty()){
+                "not specified"
+            } else {
+                it.site
+            }
+            airlineObject = Airline(it.logoURL, it.name, phone, url, false)
             airlinesList.add(airlineObject)
         }
         doAsync {
@@ -161,5 +172,14 @@ class AirlinesActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun airlineClick(pos: Int){
+        val intent = Intent(this, AirlineDetail::class.java)
+        intent.putExtra("logoUrl", airlines[pos].logoUrl)
+        intent.putExtra("name", airlines[pos].name)
+        intent.putExtra("phone", airlines[pos].phone)
+        intent.putExtra("web", airlines[pos].url)
+        startActivity(intent)
     }
 }
